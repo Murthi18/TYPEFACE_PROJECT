@@ -8,6 +8,7 @@ This doc explains **exactly how to run the frontend**, how it’s wired to the A
 ---
 
 ## 📦 What’s in this repo (matches your screenshot)
+```bash
 ├─ index.html # Login page
 ├─ signup.html # Signup page
 ├─ transaction_guide.md? # (optional helper notes you added)
@@ -25,6 +26,7 @@ This doc explains **exactly how to run the frontend**, how it’s wired to the A
 ├─ dashboard.js # Session guard, filters, charts, add/import logic
 ├─ FileUpload.js # (older helper; now merged via dashboard.js flow)
 └─ app.js # (optional bootstrap; safe to keep)
+```
 
 > If your filenames differ slightly (e.g. `js/` instead of `scripts/`), the instructions still apply—just ensure the HTML `<script>` tags point to the right paths.
 
