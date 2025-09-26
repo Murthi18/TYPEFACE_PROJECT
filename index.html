@@ -1,34 +1,167 @@
 <!doctype html>
 <html lang="en">
 <head>
-  <meta charset="utf-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Login - Personal Finance Assistant</title>
-  <link rel="stylesheet" href="css/login.css" />
+  <meta charset="utf-8"/>
+  <meta name="viewport" content="width=device-width,initial-scale=1"/>
+  <title>Sign in — TypeFace Personal Finance</title>
+
+  <link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="styles/variable.css">
+  <link rel="stylesheet" href="styles/global.css">
+  <link rel="stylesheet" href="styles/component.css">
+  <link rel="stylesheet" href="styles/login.css">
+
+  <style>
+    body.page[data-page="login"]{
+      background:
+        radial-gradient(1000px 700px at 10% 5%, rgba(124,92,255,.18), transparent 55%),
+        radial-gradient(900px 700px at 100% 100%, rgba(36,209,126,.14), transparent 55%),
+        var(--bg);
+    }
+
+    .auth{
+      width:min(1120px,95vw);
+      margin: clamp(24px, 6vh, 48px) auto;
+      display:grid; grid-template-columns:1.1fr 1fr;
+      gap:clamp(18px,2.5vw,28px);
+    }
+    @media (max-width:950px){ .auth{grid-template-columns:1fr} .auth .right{display:none} }
+
+    .left{
+      display:grid; grid-template-rows:auto auto 1fr auto; gap:14px;
+      border:1px solid rgba(255,255,255,.10); border-radius:16px;
+      background:linear-gradient(180deg, rgba(255,255,255,.06), rgba(255,255,255,.04)), var(--card);
+      box-shadow:0 20px 60px rgba(0,0,0,.35); padding:18px; position:relative; overflow:hidden;
+    }
+    .brand{display:flex;align-items:flex-end;gap:12px}
+    .title{font-size:clamp(22px,3vw,30px);letter-spacing:.2px;font-weight:800}
+    .sub{color:var(--muted)}
+
+    .form{display:grid;gap:14px}
+    .field{position:relative}
+    .field__control{
+      --h:48px;height:var(--h);width:100%;
+      padding:14px 44px 0 14px;border-radius:14px;
+      background:linear-gradient(180deg, rgba(255,255,255,.06), rgba(255,255,255,.04));
+      border:1px solid rgba(255,255,255,.10); color:var(--text); outline:none;
+      transition:box-shadow .18s ease, border-color .18s ease;
+    }
+    .field__control:hover{ border-color: rgba(255,255,255,.18) }
+    .field__control:focus{ box-shadow:0 0 0 4px var(--ring); border-color:transparent }
+    .field__label{
+      position:absolute;left:14px;top:12px;color:var(--muted);font-size:.95rem;
+      pointer-events:none;transform-origin:left top;opacity:.9;
+      transition:transform .16s ease, color .16s ease, opacity .16s ease;
+    }
+    .field__control:not(:placeholder-shown)+.field__label,
+    .field__control:focus+.field__label{ transform:translateY(-10px) scale(.84); color:#c9d3ea; opacity:.95; }
+
+    .toggle{
+      position:absolute; right:6px; top:6px; height:36px; width:36px;
+      display:grid; place-items:center; border-radius:10px;
+      border:1px solid rgba(255,255,255,.10); background:rgba(255,255,255,.04); cursor:pointer;
+    }
+
+    .row{display:flex;align-items:center;justify-content:space-between;gap:12px;flex-wrap:wrap}
+    .row .tip a{color:var(--text);text-decoration:underline}
+
+    .right{
+      border:1px solid rgba(255,255,255,.10); border-radius:16px;
+      background:
+        radial-gradient(520px 360px at 20% 10%, rgba(124,92,255,.14), transparent 60%),
+        radial-gradient(520px 360px at 100% 80%, rgba(36,209,126,.12), transparent 60%),
+        var(--panel);
+      position:relative; overflow:hidden; display:grid; place-items:center; padding:18px;
+    }
+    .brand-hero{width:min(560px,88%);height:auto;object-fit:contain;filter:drop-shadow(0 24px 48px rgba(0,0,0,.35))}
+    .brand-glow{position:absolute;inset:auto auto 12px 12px;font-weight:800;letter-spacing:.3px;font-size:14px;color:rgba(233,240,255,.75);text-shadow:0 0 24px rgba(124,92,255,.35)}
+    .reveal{opacity:1!important;transform:none!important}
+  </style>
+  <link rel="icon" href="data:,">
 </head>
-<body>
-  <div class="page-wrap">
-    <div class="login-container">
-      <form class="login-box" id="loginForm" novalidate>
-        <img src="assets/logo.svg" alt="logo" class="logo" />
-        <h1 class="title">Sign in</h1>
-        <p class="subtitle">Welcome back — manage your finances easily</p>
 
-        <label for="loginEmail" class="field-label">Email</label>
-        <input type="email" id="loginEmail" placeholder="you@example.com" required autocomplete="email" />
+<body class="page" data-page="login">
+  <main class="auth reveal">
+    <section class="left" aria-labelledby="login-title">
+      <header class="brand">
+        <div>
+          <h1 id="login-title" class="title">WELCOME BACK</h1>
+          <p class="sub">LogIn to continue to TypeFace Personal Finance.</p>
+        </div>
+      </header>
 
-        <label for="loginPassword" class="field-label">Password</label>
-        <input type="password" id="loginPassword" placeholder="Enter your password" required autocomplete="current-password" />
+      <form id="loginForm" class="form" novalidate>
+        <div class="field">
+          <input class="field__control" type="email" id="email" name="email" placeholder=" " autocomplete="email" required/>
+          <label class="field__label" for="email">Email</label>
+        </div>
 
-        <button type="submit" class="btn primary">Sign in</button>
+        <div class="field">
+          <input class="field__control" type="password" id="pwd" name="password" placeholder=" " autocomplete="current-password" required/>
+          <label class="field__label" for="pwd">Password</label>
+          <button type="button" id="togglePwd" class="toggle" aria-label="Toggle password">👁️</button>
+        </div>
 
-        <p class="muted signup-line">Don't have an account? <a href="signup.html">Sign up</a></p>
-
-        <div id="loginError" class="error" role="alert" aria-live="polite"></div>
+        <div class="row">
+          <small class="tip">No account? <a href="signup.html">Create one</a></small>
+          <button class="btn" type="submit">LogIn</button>
+        </div>
       </form>
-    </div>
-  </div>
+    </section>
 
-  <script src="js/auth.js"></script>
+    <aside class="right" aria-label="TypeFace brand">
+      <picture>
+        <source srcset="https://media.licdn.com/dms/image/v2/C4E0BAQF1toNGwK14PA/company-logo_200_200/company-logo_200_200/0/1677601239983/typefaceai_logo?e=2147483647&v=beta&t=GQ7ztKqQ_r5SdM2JMgaulMuvdVygIBG1Iaw37p3B5rE" type="image/webp"/>
+        <img class="brand-hero" src="assets/typefaceai-brand.png" alt="TypeFaceAI brand artwork"/>
+      </picture>
+      <div class="brand-glow">TypeFace</div>
+    </aside>
+  </main>
+
+  <script type="module" src="scripts/app.js"></script>
+
+  <script>
+    (function(){
+      const API_BASE = (window.VITE_API_BASE || "http://localhost:5001");
+
+      const form = document.getElementById('loginForm');
+      const email = document.getElementById('email');
+      const pwd   = document.getElementById('pwd');
+      const toggle= document.getElementById('togglePwd');
+
+      toggle?.addEventListener('click', ()=>{
+        const isPwd = pwd.type === 'password';
+        pwd.type = isPwd ? 'text' : 'password';
+        toggle.textContent = isPwd ? '🙈' : '👁️';
+      });
+
+      form.addEventListener('submit', async (e)=>{
+        e.preventDefault();
+        if(!form.checkValidity()){ form.reportValidity(); return; }
+
+        try{
+          const res = await fetch(`${API_BASE}/api/auth/login`, {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            credentials: 'include',             // important for Flask sessions
+            body: JSON.stringify({
+              email: (email.value||'').trim().toLowerCase(),
+              password: pwd.value
+            })
+          });
+          const data = await res.json().catch(()=> ({}));
+          if(!res.ok){
+            alert(data.error || 'Invalid email or password');
+            return;
+          }
+          window.location.href = 'dashboard.html';
+        }catch(err){
+          console.error(err);
+          alert('Network error — please try again.');
+        }
+      });
+    })();
+  </script>
 </body>
 </html>

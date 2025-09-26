@@ -1,0 +1,27 @@
+*{box-sizing:border-box}html,body{height:100%}
+body{margin:0;background:radial-gradient(1200px 1200px at 80% -10%,rgba(124,92,255,.15),transparent 60%),var(--bg);
+  color:var(--text);font-family:var(--font);-webkit-font-smoothing:antialiased;scroll-behavior:smooth}
+a{color:inherit;text-decoration:none}
+.container{max-width:1200px;margin:auto;padding:0 var(--gutter)}
+.hidden{display:none!important}
+
+@keyframes float{0%{transform:translateY(0)}50%{transform:translateY(-6px)}100%{transform:translateY(0)}}
+@keyframes fadeUp{from{opacity:0;transform:translateY(16px)}to{opacity:1;transform:translateY(0)}}
+.reveal{opacity:0;transform:translateY(12px);transition:all .6s cubic-bezier(.2,.8,.2,1)}
+.reveal.show{opacity:1;transform:none}
+
+.skel{position:relative;overflow:hidden;background:linear-gradient(90deg,rgba(255,255,255,.06),rgba(255,255,255,.12),rgba(255,255,255,.06));
+  background-size:200% 100%;animation:skel 1.6s infinite}
+@keyframes skel{0%{background-position:200% 0}100%{background-position:-200% 0}}
+
+.toast-wrap{position:fixed;inset:auto 0 20px;display:grid;gap:10px;place-items:center;z-index:9999}
+.toast{background:var(--panel);border:1px solid rgba(124,92,255,.25);padding:12px 16px;border-radius:12px;box-shadow:var(--shadow);animation:fadeUp .4s ease}
+.toast.success{border-color:rgba(36,209,126,.4)}.toast.error{border-color:rgba(255,92,124,.4)}
+
+.modal-backdrop{position:fixed;inset:0;background:rgba(3,6,20,.55);backdrop-filter:blur(6px);display:grid;place-items:center;z-index:9998;animation:fadeUp .2s ease}
+.modal{background:var(--panel);border-radius:var(--radius-lg);box-shadow:var(--shadow);width:min(720px,92vw);max-height:86vh;overflow:auto;padding:20px;border:1px solid rgba(255,255,255,.08)}
+
+.chip{display:inline-flex;align-items:center;gap:8px;padding:8px 12px;border-radius:999px;background:rgba(124,92,255,.14);border:1px solid rgba(124,92,255,.28);color:var(--text);cursor:pointer}
+.chip.active{background:rgba(124,92,255,.24)}
+
+.reveal { opacity: 1 !important; transform: none !important; }

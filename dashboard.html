@@ -1,110 +1,260 @@
 <!doctype html>
 <html lang="en">
 <head>
-  <meta charset="utf-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Dashboard - Personal Finance Assistant</title>
-  <link rel="stylesheet" href="css/dashboard.css" />
-  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+  <meta charset="utf-8"/>
+  <meta name="viewport" content="width=device-width,initial-scale=1"/>
+  <title>Dashboard — TypeFace Personal Finance</title>
+
+  <link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800&display=swap" rel="stylesheet">
+
+  <link rel="stylesheet" href="styles/variable.css">
+  <link rel="stylesheet" href="styles/global.css">
+  <link rel="stylesheet" href="styles/component.css">
+  <link rel="stylesheet" href="styles/dashboard.css">
+
+  <link rel="icon" href="data:,">
+  <script src="https://cdn.jsdelivr.net/npm/chart.js@4"></script>
 </head>
-<body>
-  <!-- Navbar -->
-  <header class="navbar">
-    <div class="nav-left">
-      <img src="assets/logo.svg" alt="logo" class="logo" />
-      <span class="app-name">Finance Assistant</span>
-    </div>
-    <div class="nav-right">
-      <span id="userGreeting">Hello, User</span>
-      <button id="logoutBtn" class="btn logout">Logout</button>
-    </div>
-  </header>
 
-  <!-- Summary Cards -->
-  <section class="summary-cards container">
-    <div class="card summary-card income">
-      <h3>Income</h3>
-      <p id="incomeValue">₹0</p>
-    </div>
-    <div class="card summary-card expense">
-      <h3>Expense</h3>
-      <p id="expenseValue">₹0</p>
-    </div>
-    <div class="card summary-card balance">
-      <h3>Balance</h3>
-      <p id="balanceValue">₹0</p>
-    </div>
-  </section>
-
-  <!-- Main Grid -->
-  <main class="dashboard-grid container">
-    <!-- Left Column -->
-    <div class="left-col">
-      <!-- Add Transaction -->
-      <div class="card form-card">
-        <h2>Add Transaction</h2>
-        <form id="transactionForm">
-          <label>Type
-            <select id="type"><option value="expense">Expense</option><option value="income">Income</option></select>
-          </label>
-          <label>Amount
-            <input id="amount" type="number" placeholder="₹0" />
-          </label>
-          <label>Category
-            <input id="category" placeholder="e.g. Food, Salary" />
-          </label>
-          <label>Date
-            <input id="date" type="date" />
-          </label>
-          <label>Description
-            <input id="description" placeholder="Add a note..." />
-          </label>
-          <button type="submit" class="btn primary">Add</button>
-        </form>
-      </div>
-
-      <!-- File Upload -->
-      <div class="card upload-card">
-        <h2>Upload Receipt / PDF</h2>
-        <input type="file" id="fileInput" accept="image/*,.pdf" />
-        <div id="fileStatus" class="muted">No file uploaded</div>
+<body class="page" data-page="dashboard">
+<div class="shell">
+  <aside class="sidebar">
+    <div class="side-brand">
+      <div class="blob" style="width:34px;height:34px"></div>
+      <div>
+        <strong>TypeFace</strong><br><small style="color:var(--muted)">Personal Finance</small>
       </div>
     </div>
+    <nav class="nav">
+      <a class="active" href="#"><span class="ico-wrap">🏠</span>Overview</a>
+      <a href="#transactions"><span class="ico-wrap">📋</span>Transactions</a>
+      <a href="#analytics"><span class="ico-wrap">📊</span>Analytics</a>
+      <a href="#imports"><span class="ico-wrap">📥</span>Imports</a>
+    </nav>
+  </aside>
 
-    <!-- Right Column -->
-    <div class="right-col">
-      <!-- Transactions List -->
-      <div class="card list-card">
-        <div class="list-header">
-          <h2>Transactions</h2>
-          <select id="filterType">
-            <option value="all">All</option>
-            <option value="income">Income</option>
-            <option value="expense">Expense</option>
-          </select>
+  <main class="main">
+    <header class="topbar hc">
+      <div class="tb-left">
+        <div class="brand-title">
+          <span class="title">DASHBOARD</span>
         </div>
-        <ul class="transactions" id="transactions"></ul>
-        <div id="pagination" class="pagination"></div>
+
+        <select id="quickRange" class="select-cyan" aria-label="Quick range">
+          <option value="MTD" selected>MTD</option>
+          <option value="7D">Last 7 days</option>
+          <option value="ALL">All time</option>
+        </select>
       </div>
 
-      <!-- Charts -->
-      <div class="card chart-card">
-        <h2>Insights</h2>
-        <canvas id="categoryChart"></canvas>
-        <canvas id="timeChart"></canvas>
+      <div class="tb-center">
+        <div class="command">
+          <span class="cmd-ico" aria-hidden="true">🔎</span>
+          <input id="searchTxt" placeholder="Search (description, >1000, Rent)…" aria-label="Search transactions"/>
+          <kbd class="kbd">⌘K</kbd>
+        </div>
+      </div>
+
+      <div class="tb-right">
+        <button class="icon-btn" id="bell" title="Notifications" aria-label="Notifications">
+          <span class="ico-wrap"><span class="ico">🔔</span></span><i class="dot"></i>
+        </button>
+        <button class="icon-btn" id="themeToggle" title="Toggle theme" aria-label="Toggle theme">
+          <span class="ico-wrap"><span class="ico">🌙</span></span>
+        </button>
+        <div class="profile" id="profileMenu">
+          <button class="avatar" aria-haspopup="menu" aria-expanded="false"><span>US</span></button>
+          <ul class="menu" role="menu" aria-label="Profile">
+            <li role="none"><a role="menuitem" href="#" id="logoutBtn">Sign out</a></li>
+          </ul>
+        </div>
+      </div>
+    </header>
+
+    <!-- Content -->
+    <section class="dash-wrap">
+      <!-- KPIs -->
+      <div class="kpis">
+        <div class="card reveal">
+          <div class="kpi">
+            <div class="kpi-ico green">⬆️</div>
+            <div class="kpi-meta">
+              <span>Income</span>
+              <div id="kpiIncome" class="value">—</div>
+              <div class="delta up" id="kpiIncomeDelta">+0%</div>
+            </div>
+          </div>
+        </div>
+        <div class="card reveal">
+          <div class="kpi">
+            <div class="kpi-ico red">⬇️</div>
+            <div class="kpi-meta">
+              <span>Expenses</span>
+              <div id="kpiExpense" class="value">—</div>
+              <div class="delta down" id="kpiExpenseDelta">-0%</div>
+            </div>
+          </div>
+        </div>
+        <div class="card reveal">
+          <div class="kpi">
+            <div class="kpi-ico violet">➗</div>
+            <div class="kpi-meta">
+              <span>Net</span>
+              <div id="kpiNet" class="value">—</div>
+              <div class="mini" id="kpiNetNote">MTD</div>
+            </div>
+          </div>
+        </div>
+        <div class="card reveal">
+          <div class="kpi">
+            <div class="kpi-ico">🎯</div>
+            <div style="width:100%">
+              <span>Budget Health</span>
+              <div class="progress big"><span id="budgetBar" style="width:0%"></span></div>
+              <div class="mini" id="budgetNote">— / month</div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Transactions + Analytics -->
+      <div class="grid" id="transactions">
+        <!-- Transactions -->
+        <div class="card reveal">
+          <div class="hd">
+            <strong>Transactions</strong>
+            <div class="filters">
+              <div class="input"><label>Start</label><input id="startDate" type="date"></div>
+              <div class="input"><label>End</label><input id="endDate" type="date"></div>
+              <div class="input"><label>Category</label>
+                <select id="catSel">
+                  <option value="">All</option>
+                  <option>Food</option><option>Groceries</option><option>Travel</option>
+                  <option>Rent</option><option>Salary</option><option>Shopping</option>
+                </select>
+              </div>
+            </div>
+          </div>
+
+          <div class="bd table-wrap">
+            <table class="table">
+              <thead>
+                <tr>
+                  <th style="width:120px">Date</th>
+                  <th>Description</th>
+                  <th style="width:100px">Type</th>
+                  <th style="width:140px">Category</th>
+                  <th style="text-align:right;width:140px">Amount</th>
+                </tr>
+              </thead>
+              <tbody id="txBody"></tbody>
+            </table>
+
+            <div id="emptyState" class="empty hidden">
+              <div class="empty-ico">🫙</div>
+              <div>No transactions</div>
+            </div>
+
+            <!-- Pagination -->
+            <div class="pagi">
+              <button class="chip" id="prevPage" disabled>← Prev</button>
+              <div class="pages"><button class="page-btn active" data-page="1">1</button></div>
+              <button class="chip" id="nextPage" disabled>Next →</button>
+              <div class="page-info" id="pageInfo">Page 1 of 1</div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Analytics -->
+        <div class="card reveal" id="analytics" style="background:#000; color:#fff; border:1px solid rgba(255,255,255,.14); box-shadow:0 18px 44px rgba(0,0,0,.6)">
+        <div class="hd"><strong style="color:#fff">Analytics</strong></div>
+        <div class="bd charts" style="color:#eaeef9">
+          <canvas id="byCat" height="200" style="background:transparent"></canvas>
+          <canvas id="overTime" height="200" style="background:transparent"></canvas>
+          <canvas id="incomeVsExpense" height="220" style="background:transparent"></canvas>
+        </div>
+      </div>
+      </div>
+
+      <div class="card reveal">
+        <div class="hd"><strong>Add Transaction</strong></div>
+        <div class="bd">
+          <form id="addTxForm" class="quick-form" novalidate>
+            <input name="date" type="date" required>
+            <select name="type"><option value="expense">Expense</option><option value="income">Income</option></select>
+            <input name="category" placeholder="Category (e.g., Food)" required>
+            <input name="description" placeholder="Description">
+            <input name="amount" type="number" step="0.01" placeholder="Amount" required>
+            <button class="btn" type="submit">Add</button>
+          </form>
+        </div>
+      </div>
+
+      <div id="imports" class="card reveal">
+      <div class="hd"><strong>Import</strong></div>
+      <div class="bd" style="display:grid;gap:12px">
+        <div id="uploadReceipt" class="upload" style="display:grid;gap:8px">
+          <div><strong>POS Receipts</strong> — images or scanned PDFs</div>
+          <label class="btn ghost" style="cursor:pointer">
+            Choose files
+            <input id="fileReceipt" type="file" accept=".pdf,image/*" multiple hidden>
+          </label>
+          <div class="progress" style="width:100%;max-width:420px"><span id="uploadBarReceipt"></span></div>
+          <small class="tip">We’ll OCR the receipt and let you review in a modal before saving.</small>
+        </div>
+
+        <div id="uploadStatement" class="upload" style="display:grid;gap:8px">
+          <div><strong>Bank/Wallet Statements</strong> — tabular PDFs</div>
+          <label class="btn ghost" style="cursor:pointer">
+            Choose PDF
+            <input id="fileStatement" type="file" accept=".pdf" multiple hidden>
+          </label>
+          <div class="progress" style="width:100%;max-width:420px"><span id="uploadBarStatement"></span></div>
+          <small class="tip">Detects table rows and imports them directly after a quick confirmation.</small>
+        </div>
       </div>
     </div>
-  </main>
 
-  <script src="js/utils.js"></script>
-  <script src="js/transactions.js"></script>
-  <script src="js/filters.js"></script>
-  <script src="js/charts.js"></script>
-  <script src="js/fileUpload.js"></script>
-  <script src="js/app.js"></script>
-  <script src="js/auth.js"></script>
-  <script src="https://cdn.jsdelivr.net/npm/tesseract.js@4/dist/tesseract.min.js"></script>
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/2.10.377/pdf.min.js"></script>
+    </section>
+  </main>
+</div>
+
+<script type="module" src="scripts/dashboard.js"></script>
+<!-- Import Preview Modal (for receipts) -->
+<div id="importModal" class="modal" aria-hidden="true" role="dialog" aria-modal="true" aria-labelledby="importTitle">
+  <div class="modal__dialog">
+    <div class="modal__hd">
+      <h3 id="importTitle">Review extracted transactions</h3>
+      <button class="icon-btn" aria-label="Close" onclick="(function(){document.getElementById('btnCancelImport').click()})()">✕</button>
+    </div>
+    <div class="modal__bd">
+      <div class="table-wrap" style="max-height:50vh;overflow:auto">
+        <table class="table">
+          <thead>
+            <tr>
+              <th style="width:130px">Date</th>
+              <th style="width:110px">Type</th>
+              <th style="width:180px">Category</th>
+              <th>Description</th>
+              <th style="width:140px;text-align:right">Amount</th>
+              <th style="width:50px"></th>
+            </tr>
+          </thead>
+          <tbody id="previewBody"></tbody>
+        </table>
+      </div>
+      <div style="display:flex;justify-content:space-between;align-items:center;margin-top:10px">
+        <small class="tip">You can edit any cell or remove rows before importing.</small>
+        <div><strong>Total:</strong> <span id="previewTotal">₹0.00</span></div>
+      </div>
+    </div>
+    <div class="modal__ft">
+      <button id="btnCancelImport" class="btn ghost">Cancel</button>
+      <button id="btnConfirmImport" class="btn">Import</button>
+    </div>
+  </div>
+</div>
 
 </body>
 </html>
